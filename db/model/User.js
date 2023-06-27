@@ -18,6 +18,12 @@ const User = seq.define('user', {
     allowNull: false,
     comment: '昵称'
   },
+  role: {
+    type: DECIMAL,
+    allowNull: false,
+    defaultVal: 3,
+    comment: '角色(1 管理员 2 普通用户)'
+  },
   gender: {
     type: DECIMAL,
     allowNull: false,

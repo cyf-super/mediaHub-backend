@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize')
-import { MYSQL_CONF } from '../conf/db'
+const { MYSQL_CONF } = require('../conf/db')
 
 const { host, user, password, database } = MYSQL_CONF
 
