@@ -5,24 +5,26 @@ const json = require('koa-json')
 const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
+const koaJwt = require('koa-jwt')
+const { publicKey } = require('./conf/config')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
+
 
 // error handler
 onerror(app)
 
 // middlewares
 app.use(bodyparser({
-  enableTypes:['json', 'form', 'text']
+  enableTypes: ['json', 'form', 'text']
 }))
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
-app.use(views(__dirname + '/views', {
-  extension: 'pug'
-}))
+app.use(koaJwt({ secret: publicKey }).unless({ path: [/^\/public|\/user\/login|\/assets/] }))
+
 
 // logger
 app.use(async (ctx, next) => {
@@ -35,6 +37,8 @@ app.use(async (ctx, next) => {
 // routes
 app.use(index.routes(), index.allowedMethods())
 app.use(users.routes(), users.allowedMethods())
+
+
 
 // error-handling
 app.on('error', (err, ctx) => {
