@@ -11,7 +11,6 @@ const { publicKey } = require('./conf/config')
 const index = require('./routes/index')
 const users = require('./routes/users')
 
-
 // error handler
 onerror(app)
 
@@ -23,7 +22,7 @@ app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
 
-app.use(koaJwt({ secret: publicKey }).unless({ path: [/^\/public|\/user\/login|\/assets/] }))
+app.use(koaJwt({ secret: publicKey }).unless({ path: [/^\/public|\/api\/login|\/assets/] }))
 
 
 // logger
