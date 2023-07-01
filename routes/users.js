@@ -1,31 +1,26 @@
-const router = require('koa-router')()
-const jwt = require('jsonwebtoken')
-const { publicKey } = require('../conf/config')
+const router = require("koa-router")();
+const jwt = require("jsonwebtoken");
 
-router.prefix('/api')
+const { publicKey } = require("../conf/config");
+const { loginController } = require('../controller/user')
 
-router.post('/login', function (ctx, next) {
-  const { username, password } = ctx.request.body
-  const data = {
-    id: 1,
-    username
-  }
+router.prefix("/api");
 
-  const token = jwt.sign(data, publicKey, {
-    expiresIn: '7d'
-  })
+router.post("/login", async (ctx, next) => {
+  const { username, password } = ctx.request.body;
+
+  const data = await loginController(username, password)
+
+  ctx.body = data
+});
+
+router.get("/user", function (ctx, next) {
+  let token = ctx.request.header.authorization;
+  token = token.split(" ")[1];
+  const info = jwt.verify(token, publicKey);
   ctx.body = {
-    token
-  }
-})
+    info,
+  };
+});
 
-router.get('/getUserInfo', function (ctx, next) {
-  let token = ctx.request.header.authorization
-  token = token.split(' ')[1]
-  const info = jwt.verify(token, publicKey)
-  ctx.body = {
-    info
-  }
-})
-
-module.exports = router
+module.exports = router;

@@ -1,13 +1,16 @@
-const seq = require('./seq.js')
+const seq = require("./seq.js");
 
-require('./model/index')
+require("./model/index");
 
-seq.authenticate().then(() => {
-  console.log('ok')
-}).catch(() => {
-  console.log('err')
-})
+seq
+  .authenticate()
+  .then(() => {
+    console.log("ok");
+  })
+  .catch(() => {
+    console.log("err");
+  });
 
 seq.sync().then(() => {
-  process.exit()
-})
+  process.exit();
+});
