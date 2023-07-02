@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "propertier": {
+    "userName": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_]+$",
+      "maxLength": 255,
+      "minLength": 2
+    },
+    "password": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 6
+    },
+    "newPassword": {
+      "type": "string",
+      "maxLength": 255,
+      "minLength": 6
+    },
+    "nickName": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "role": {
+      "type": "number"
+    }
+  },
+  "require": ["userName", "password"]
+}

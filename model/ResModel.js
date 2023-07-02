@@ -1,6 +1,6 @@
 class BaseModel {
-  constructor({ error, data, message }) {
-    this.error = error;
+  constructor({ code, data, message }) {
+    this.code = code;
     data && (this.data = data);
     message && (this.message = message);
   }
@@ -18,9 +18,9 @@ class SuccessModel extends BaseModel {
 
 // 失败
 class ErrorModel extends BaseModel {
-  constructor({ error, message }) {
+  constructor({ code, message }) {
     super({
-      error,
+      code,
       message,
     });
   }
