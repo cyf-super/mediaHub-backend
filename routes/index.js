@@ -1,19 +1,11 @@
-const router = require("koa-router")();
+const fs = require("fs");
 
-router.get("/", async (ctx, next) => {
-  await ctx.render("index", {
-    title: "Hello Koa 2!",
-  });
-});
-
-router.get("/api/string", async (ctx, next) => {
-  ctx.body = "koa2 string";
-});
-
-router.get("/api/json", async (ctx, next) => {
-  ctx.body = {
-    title: "koa2 json",
-  };
-});
-
-module.exports = router;
+module.exports = function (app) {
+  const curFiles = fs.readdirSync(__dirname)
+  curFiles.forEach(file => {
+    if (file !== 'index.js') {
+      const router = require(`./${file}`)
+      app.use(router.routes(), router.allowedMethods())
+    }
+  })
+}

@@ -2,13 +2,17 @@ const router = require("koa-router")();
 const jwt = require("jsonwebtoken");
 
 const { publicKey } = require("../conf/config");
-const { loginController } = require('../controller/user');
+const { loginController, registerController } = require('../controller/user');
 const { validateUser } = require("../middleware/Validator");
 
 router.prefix("/api");
 
 router.post('/register', validateUser(), async (ctx) => {
   const { username, password, picture } = ctx.request.body
+
+  const data = await registerController({ username, password, picture })
+
+  ctx.body = data
 })
 
 router.post("/login", async (ctx) => {

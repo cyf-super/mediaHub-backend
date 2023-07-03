@@ -11,4 +11,8 @@ module.exports = {
     code: '10003',
     msg: '用户已经存在'
   },
+  createUserFailInfo: {
+    code: '10004',
+    msg: '创建用户失败'
+  },
 }

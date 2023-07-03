@@ -2,8 +2,8 @@ const doCrypto = require('../utils/crypto')
 const jwt = require("jsonwebtoken");
 
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
-const { loginFailInfo, userExistInfo } = require('../model/ErrorInfo')
-const { loginService } = require('../services/user')
+const { loginFailInfo, userExistInfo, createUserFailInfo } = require('../model/ErrorInfo')
+const { loginService, createUser } = require('../services/user')
 const { publicKey } = require("../conf/config");
 
 /**
@@ -23,11 +23,22 @@ async function isExist(username) {
  * 注册
  * @param {object} param0 
  */
-async function registerController({ username, password, picture, role }) {
+async function registerController({ username, password, picture }) {
   const msg = await isExist(username)
+  // 用户已经存在
   if (msg.code !== 0) return msg
 
+  try {
+    await createUser({
+      username,
+      password: doCrypto(password),
+      picture
+    })
 
+    return new SuccessModel()
+  } catch (e) {
+    return new ErrorModel(createUserFailInfo)
+  }
 }
 
 

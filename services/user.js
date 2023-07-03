@@ -1,6 +1,12 @@
 const User = require('../db/model/User')
 
 
+/**
+ * 登陆
+ * @param {string} username 
+ * @param {string} password 
+ * @returns 
+ */
 async function loginService(username, password) {
   const whereOpt = {
     username
@@ -23,6 +29,28 @@ async function loginService(username, password) {
   return userInfo
 }
 
+async function createUser({
+  username,
+  password,
+  piture = '',
+  gender = 3,
+  role = 0b10,
+}) {
+  piture = piture || ''
+  const res = await User.create({
+    username,
+    password,
+    piture,
+    nickname: username,
+    gender,
+    role
+  })
+
+  const data = res.dataValues
+  return data
+}
+
 module.exports = {
-  loginService
+  loginService,
+  createUser
 }

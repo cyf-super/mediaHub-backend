@@ -7,8 +7,7 @@ const logger = require("koa-logger");
 const koaJwt = require("koa-jwt");
 const { publicKey } = require("./conf/config");
 
-const index = require("./routes/index");
-const users = require("./routes/users");
+const router = require("./routes/index");
 const ErrorRoutesCatch = require("./middleware/ErrorAuthenticationCatch");
 
 // error handler
@@ -43,8 +42,7 @@ app.use(async (ctx, next) => {
 });
 
 // routes
-app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
+router(app)
 
 // error-handling
 app.on("error", (err, ctx) => {
