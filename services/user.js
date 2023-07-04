@@ -7,7 +7,7 @@ const User = require('../db/model/User')
  * @param {string} password 
  * @returns 
  */
-async function loginService(username, password) {
+async function getUserInfo(username, password) {
   const whereOpt = {
     username
   }
@@ -18,15 +18,16 @@ async function loginService(username, password) {
 
   const userInfo = await User.findOne({
     where: whereOpt,
-    attributes: ['id', 'userName', 'nickName', 'picture', 'city']
+    attributes: ['id', 'username', 'nickname', 'role']
   })
+
+  console.log('userInfo ', userInfo.dataValues)
 
   if (!userInfo) {
     return userInfo
   }
 
-  console.log('userInfo ', userInfo)
-  return userInfo
+  return userInfo.dataValues
 }
 
 async function createUser({
@@ -51,6 +52,6 @@ async function createUser({
 }
 
 module.exports = {
-  loginService,
+  getUserInfo,
   createUser
 }

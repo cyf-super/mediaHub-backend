@@ -9,19 +9,22 @@ router.prefix("/api");
 
 router.post('/register', validateUser(), async (ctx) => {
   const { username, password, picture } = ctx.request.body
-
+  console.log('username, password, picture ', username, password, picture)
   const data = await registerController({ username, password, picture })
 
   ctx.body = data
 })
 
+/**
+ * 登录
+ */
 router.post("/login", async (ctx) => {
   const { username, password } = ctx.request.body;
-
   const data = await loginController(username, password)
 
   ctx.body = data
 });
+
 
 router.get("/user", function (ctx) {
   let token = ctx.request.header.authorization;

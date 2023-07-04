@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
 const { loginFailInfo, userExistInfo, createUserFailInfo } = require('../model/ErrorInfo')
-const { loginService, createUser } = require('../services/user')
+const { getUserInfo, createUser } = require('../services/user')
 const { publicKey } = require("../conf/config");
 
 /**
@@ -12,8 +12,8 @@ const { publicKey } = require("../conf/config");
  * @returns 
  */
 async function isExist(username) {
-  const userInfo = await loginService(username)
-  if (!userInfo) {
+  const userInfo = await getUserInfo(username)
+  if (userInfo) {
     return new ErrorModel(userExistInfo)
   }
   return new SuccessModel()
@@ -41,27 +41,23 @@ async function registerController({ username, password, picture }) {
   }
 }
 
-
 /**
  * 登陆
  * @param {string} username 
  * @param {string} password 
- * @returns 
+ * @returns
  */
 async function loginController(username, password) {
-  const userInfo = await loginService(username, doCrypto(password))
+  const userInfo = await getUserInfo(username, doCrypto(password))
 
   if (!userInfo) {
     return new ErrorModel(loginFailInfo)
   }
-
-  const data = new SuccessModel(userInfo)
-  const token = jwt.sign(data, publicKey, {
-    expiresIn: "1h",
-  });
+  const res = new SuccessModel(userInfo)
+  const token = jwt.sign(res.data, publicKey, { expiresIn: '1h' });
 
   return {
-    data,
+    ...res,
     token
   }
 }

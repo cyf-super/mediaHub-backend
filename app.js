@@ -29,7 +29,7 @@ app.use(ErrorRoutesCatch())
 
 app.use(
   koaJwt({ secret: publicKey }).unless({
-    path: [/^\/public|\/api\/login|\/assets/],
+    path: [/^\/public|\/assets/, '/api/login', '/api/register'],
   })
 );
 

@@ -1,7 +1,7 @@
 {
   "type": "object",
-  "propertier": {
-    "userName": {
+  "properties": {
+    "username": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9_]+$",
       "maxLength": 255,
@@ -17,13 +17,16 @@
       "maxLength": 255,
       "minLength": 6
     },
-    "nickName": {
+    "nickname": {
       "type": "string",
       "maxLength": 255
     },
     "role": {
       "type": "number"
+    },
+    "picture": {
+      "type": "string"
     }
   },
-  "require": ["userName", "password"]
+  "required": ["username", "password"]
 }
