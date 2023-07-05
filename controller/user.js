@@ -1,4 +1,4 @@
-const doCrypto = require('../utils/crypto')
+const { doBcrypt } = require('../utils/crypto')
 const jwt = require("jsonwebtoken");
 
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
@@ -28,10 +28,11 @@ async function registerController({ username, password, picture }) {
   // 用户已经存在
   if (msg.code !== 0) return msg
 
+  const cryptPW = await doBcrypt(password)
   try {
     await createUser({
       username,
-      password: doCrypto(password),
+      password: cryptPW,
       picture
     })
 
@@ -48,8 +49,7 @@ async function registerController({ username, password, picture }) {
  * @returns
  */
 async function loginController(username, password) {
-  const userInfo = await getUserInfo(username, doCrypto(password))
-
+  const userInfo = await getUserInfo(username, password)
   if (!userInfo) {
     return new ErrorModel(loginFailInfo)
   }

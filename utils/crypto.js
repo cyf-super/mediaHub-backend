@@ -1,21 +1,28 @@
-const { CRYPTO_KEY } = require('../conf/config')
-let crypto;
-try {
-  crypto = require('crypto');
-} catch (err) {
-  console.error('crypto support is disabled!');
+const { saltRounds } = require('../conf/config')
+const bcrypt = require('bcrypt')
+
+/**
+ * password加密
+ * 
+ * @param {string} content 
+ * @returns 
+ */
+async function doBcrypt(content) {
+  return await bcrypt.hash(content, saltRounds)
 }
 
-function getMd5ByCrypto(content) {
-  if (!crypto) return
-  const md5 = crypto.createHash('md5')
-  return md5.update(content).digest('hex')
+/**
+ * 内容与加密的hash进行比较
+ * 
+ * @param {string} content 原始数据
+ * @param {string} hash 加密后的hash
+ * @returns Boolean
+ */
+async function compareBcrypt(content, hash) {
+  return await bcrypt.compare(content, hash)
 }
 
-// password加密
-function doCrypto(content) {
-  const str = `password=${content}&key=${CRYPTO_KEY}`
-  return getMd5ByCrypto(str) ?? content
+module.exports = {
+  doBcrypt,
+  compareBcrypt
 }
-
-module.exports = doCrypto

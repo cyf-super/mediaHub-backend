@@ -1,4 +1,5 @@
 const User = require('../db/model/User')
+const { compareBcrypt } = require('../utils/crypto')
 
 
 /**
@@ -12,22 +13,23 @@ async function getUserInfo(username, password) {
     username
   }
 
-  if (password) {
-    Object.assign(whereOpt, { password })
-  }
-
   const userInfo = await User.findOne({
     where: whereOpt,
-    attributes: ['id', 'username', 'nickname', 'role']
+    attributes: ['id', 'username', 'nickname', 'password', 'role']
   })
-
-  console.log('userInfo ', userInfo.dataValues)
 
   if (!userInfo) {
     return userInfo
   }
 
-  return userInfo.dataValues
+  // 比较前后两次的密码
+  const flag = await compareBcrypt(password, userInfo.dataValues.password)
+  if (flag) {
+    delete userInfo.dataValues.password
+    return userInfo.dataValues
+  }
+
+  return null
 }
 
 async function createUser({
