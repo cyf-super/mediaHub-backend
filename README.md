@@ -1,9 +1,9 @@
 # MediaHub 后端
 
-资料管理网站[https://github.com/cyf-super/react-video]的后端
+[资料管理网站](https://github.com/cyf-super/react-video)的后端
 
-技术栈：koa
-数据库：MySql
+技术栈：koa  
+数据库：MySql  
 鉴权机制：token（koa-jwt）
 
 ## 使用
