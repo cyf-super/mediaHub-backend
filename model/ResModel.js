@@ -10,7 +10,7 @@ class BaseModel {
 class SuccessModel extends BaseModel {
   constructor(data = {}) {
     super({
-      data,
+      ...data,
       code: 0,
     });
   }

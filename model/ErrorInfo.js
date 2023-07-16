@@ -22,4 +22,8 @@ module.exports = {
       errInfo: 'Authentication Error, use the correct Authorization header to get access.'
     }
   },
+  categoryExistInfo: {
+    code: '10006',
+    message: '类别已经存在'
+  }
 }
