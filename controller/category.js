@@ -8,8 +8,6 @@ const { getUuid } = require('../utils/tools')
  */
 async function categoryCont() {
   const data = await getAllCategory()
-  console.log("🚀 ~ categoryController ~ data:", data)
-
   return new SuccessModel(data)
 }
 
@@ -21,7 +19,6 @@ async function createCategoryCont(name) {
 
   const options = { name, categoryId: getUuid() }
   const data = await createCategory(options)
-  console.log("🚀 ~ categoryController ~ data:", data)
   return new SuccessModel(data)
 }
 

@@ -25,5 +25,10 @@ module.exports = {
   categoryExistInfo: {
     code: '10006',
     message: '类别已经存在'
-  }
+  },
+  fileSizeExceedInfo: {
+    code: '10007',
+    message: '文件大小超过200M'
+  },
+
 }

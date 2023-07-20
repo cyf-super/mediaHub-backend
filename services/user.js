@@ -22,6 +22,11 @@ async function getUserInfo(username, password) {
     return userInfo
   }
 
+  if (!password) {
+    delete userInfo.dataValues.password
+    return userInfo.dataValues
+  }
+
   // 比较前后两次的密码
   const flag = await compareBcrypt(password, userInfo.dataValues.password)
   if (flag) {

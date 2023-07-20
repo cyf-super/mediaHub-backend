@@ -1,5 +1,5 @@
 class BaseModel {
-  constructor({ code, data, message }) {
+  constructor({ code, message, ...data }) {
     this.code = code;
     data && (this.data = data);
     message && (this.message = message);
@@ -9,6 +9,7 @@ class BaseModel {
 // 成功
 class SuccessModel extends BaseModel {
   constructor(data = {}) {
+
     super({
       ...data,
       code: 0,

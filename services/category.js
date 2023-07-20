@@ -21,7 +21,7 @@ async function getAllCategory() {
   const res = data.rows.map(category => category.dataValues)
   return {
     count: data.count,
-    data: res
+    categories: res
   }
 }
 
