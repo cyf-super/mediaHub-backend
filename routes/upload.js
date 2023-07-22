@@ -8,8 +8,8 @@ const upload = multer()
 
 router.post('/upload', upload.single('file'), async (ctx) => {
   const file = ctx.file;
-  const { category, categoryId, name } = ctx.request.body;
-  ctx.body = await saveFile({ category, categoryId, name, file });
+  const { categoryId, fileId, name } = ctx.request.body;
+  ctx.body = await saveFile({ fileId, categoryId, name, file });
 })
 
 
