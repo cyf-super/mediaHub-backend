@@ -10,13 +10,7 @@ const File = seq.define('file', {
   name: {
     type: STRING,
     allowNull: false,
-    unique: false
-  },
-  createTime: {
-    type: INTEGER,
-    allowNull: false,
-    unique: false,
-    comment: '创建时间'
+    unique: true
   },
   size: {
     type: INTEGER,
@@ -33,9 +27,14 @@ const File = seq.define('file', {
   path: {
     type: STRING,
     allowNull: false,
-    unique: false,
+    unique: true,
     comment: '文件路径'
-  }
+  },
+  categoryId: {
+    type: STRING,
+    allowNull: true,
+    unique: false
+  },
 })
 
 module.exports = File

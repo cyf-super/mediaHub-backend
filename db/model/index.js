@@ -3,7 +3,8 @@ const FileCategory = require('./FileCategory')
 const File = require('./File')
 
 FileCategory.hasMany(File, {
-  foreignKey: 'categoryId'
+  foreignKey: 'categoryId',
+  targetKey: 'fileId',
 })
 
 File.belongsTo(FileCategory, {

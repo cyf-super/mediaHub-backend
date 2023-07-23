@@ -5,14 +5,17 @@ const onerror = require("koa-onerror");
 const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const koaJwt = require("koa-jwt");
+const koaStatic = require('koa-static')
 const { publicKey } = require("./conf/config");
+const path = require('path')
 
 const router = require("./routes/index");
 const ErrorRoutesCatch = require("./middleware/ErrorAuthenticationCatch");
 
+app.use(koaStatic(path.join(__dirname, 'uploadFiles')))
+
 // error handler
 onerror(app);
-
 
 
 // middlewares
@@ -23,13 +26,12 @@ app.use(
 );
 app.use(json());
 app.use(logger());
-app.use(require("koa-static")(__dirname + "/public"));
 
 app.use(ErrorRoutesCatch())
 
 app.use(
   koaJwt({ secret: publicKey }).unless({
-    path: [/^\/public|\/assets/, '/api/login', '/api/register'],
+    path: [/^\/public|\/assets|\/uploadFiles|\/static/, '/api/login', '/api/register'],
   })
 );
 

@@ -1,7 +1,7 @@
 const path = require('path')
 const fse = require('fs-extra')
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
-const { fileSizeExceedInfo } = require('../model/ErrorInfo')
+const { fileSizeExceedInfo, uploadFailInfo, uploadSuccessInfo } = require('../model/ErrorInfo')
 const { createFile } = require('../services/upload')
 
 const DIST_FOLDER_PATH = path.join(__dirname, '..', 'uploadFiles')
@@ -26,15 +26,18 @@ async function saveFile({ name, fileId, categoryId, file }) {
 
   try {
     const fileName = Date.now() + '.' + name
-    const filePath = path.join(fileDir, fileName)
+    let filePath = path.join(fileDir, fileName)
     await fse.writeFile(filePath, file.buffer)
-    console.log(filePath, fileName, fileId, categoryId, file)
+
+    filePath = ('\\' + path.relative(path.join(process.cwd(), 'uploadFiles'), filePath)).replace(/\\/g, '/')
+
     const res = await createFile({ filePath, fileName, fileId, categoryId, file })
     if (res) {
-      return '上传成功'
+      return new SuccessModel(uploadSuccessInfo)
     }
   } catch (err) {
-    return '上传失败'
+    console.log("🚀 ~ saveFile ~ err:", err)
+    return new ErrorModel(uploadFailInfo)
   }
 }
 

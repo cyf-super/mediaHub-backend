@@ -1,4 +1,5 @@
-module.exports = {
+// 用户信息
+const userInfo = {
   loginFailInfo: {
     code: '10001',
     message: '用户名或密码错误'
@@ -21,14 +22,35 @@ module.exports = {
       status: 401,
       errInfo: 'Authentication Error, use the correct Authorization header to get access.'
     }
-  },
+  }
+}
+
+// 类别
+const categoryInfo = {
   categoryExistInfo: {
-    code: '10006',
+    code: '11001',
     message: '类别已经存在'
-  },
+  }
+}
+
+// 上传信息
+const uploadInfo = {
   fileSizeExceedInfo: {
-    code: '10007',
+    code: '12001',
     message: '文件大小超过200M'
   },
+  uploadFailInfo: {
+    code: '12002',
+    message: '上传失败'
+  },
+  uploadSuccessInfo: {
+    code: '12003',
+    message: '上传成功'
+  },
+}
 
+module.exports = {
+  ...userInfo,
+  ...categoryInfo,
+  ...uploadInfo
 }
