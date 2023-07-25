@@ -49,8 +49,18 @@ const uploadInfo = {
   },
 }
 
+
+// 操作文件
+const fileInfo = {
+  fileRequestFailInfo: {
+    code: '13001',
+    message: '文件请求失败'
+  },
+}
+
 module.exports = {
   ...userInfo,
   ...categoryInfo,
-  ...uploadInfo
+  ...uploadInfo,
+  ...fileInfo
 }
