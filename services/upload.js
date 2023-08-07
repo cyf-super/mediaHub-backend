@@ -19,7 +19,6 @@ async function createFile({ filePath, fileName, fileId, categoryId, file }) {
     categoryId
   })
 
-  console.log("🚀 ~ createFile ~ res:", res)
   return res.dataValues
 }
 

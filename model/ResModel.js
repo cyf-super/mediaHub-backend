@@ -1,8 +1,8 @@
 class BaseModel {
   constructor({ code, message, ...data }) {
     this.code = code;
-    data && (this.data = data);
-    message && (this.message = message);
+    this.message = message;
+    JSON.stringify(data) !== '{}' && (this.data = data);
   }
 }
 
@@ -11,8 +11,8 @@ class SuccessModel extends BaseModel {
   constructor(data = {}) {
 
     super({
-      ...data,
       code: 0,
+      ...data,
     });
   }
 }

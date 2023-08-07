@@ -56,6 +56,18 @@ const fileInfo = {
     code: '13001',
     message: '文件请求失败'
   },
+  noExistFileInfo: {
+    code: '13002',
+    message: '该文件不存在'
+  },
+  deleteFileSucceedInfo: {
+    code: '13003',
+    message: '文件删除成功'
+  },
+  deleteFileFailInfo: {
+    code: '13004',
+    message: '删除文件失败'
+  }
 }
 
 module.exports = {

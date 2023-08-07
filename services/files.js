@@ -17,6 +17,22 @@ async function getFilesServer({ categoryId }) {
   return data
 }
 
+
+async function deleteFilesServer(fileIds) {
+  try {
+    const res = await File.destroy({
+      where: {
+        fileId: fileIds
+      }
+    })
+
+    return res
+  } catch (e) {
+    return e
+  }
+}
+
 module.exports = {
-  getFilesServer
+  getFilesServer,
+  deleteFilesServer
 }
