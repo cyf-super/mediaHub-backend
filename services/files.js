@@ -1,6 +1,6 @@
 const File = require('../db/model/File')
 
-async function getFilesServer({ categoryId }) {
+async function getFilesServer({ categoryId = '83994e35-c027-475c-889c-ad159b6fa0a0' }) {
   const options = {
     categoryId
   }

@@ -6,12 +6,13 @@ const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const koaJwt = require("koa-jwt");
 const koaStatic = require('koa-static')
-const { publicKey } = require("./conf/config");
 const path = require('path')
+const { publicKey } = require("./conf/config");
+const staticVideo = require('./middleware/staticVideo')
 
 const router = require("./routes/index");
 const ErrorRoutesCatch = require("./middleware/ErrorAuthenticationCatch");
-
+app.use(staticVideo());
 app.use(koaStatic(path.join(__dirname, 'uploadFiles')))
 
 // error handler
@@ -26,6 +27,7 @@ app.use(
 );
 app.use(json());
 app.use(logger());
+
 
 app.use(ErrorRoutesCatch())
 
