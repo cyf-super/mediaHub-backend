@@ -12,6 +12,7 @@ const staticVideo = require('./middleware/staticVideo')
 
 const router = require("./routes/index");
 const ErrorRoutesCatch = require("./middleware/ErrorAuthenticationCatch");
+
 app.use(staticVideo());
 app.use(koaStatic(path.join(__dirname, 'uploadFiles')))
 
