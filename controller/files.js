@@ -1,7 +1,27 @@
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
 const { fileRequestFailInfo, noExistFileInfo, deleteFileSucceedInfo, deleteFileFailInfo } = require('../model/ErrorInfo')
-const { getFilesServer, deleteFilesServer } = require('../services/files')
+const { getFileServer, getFilesServer, deleteFilesServer } = require('../services/files')
 
+
+/**
+ * 获取单个文件
+ * @param {*} fileId 
+ */
+async function getFileController(fileId) {
+  const res = await getFileServer(fileId)
+  if (!res) {
+    return new ErrorModel(noExistFileInfo)
+  }
+
+  return new SuccessModel(res)
+}
+
+
+/**
+ * 根据类别id获取文件
+ * @param {*} param0 
+ * @returns 
+ */
 async function getFilesController({ categoryId }) {
   const res = await getFilesServer({ categoryId })
   if (!res) {
@@ -23,6 +43,7 @@ async function deleteFilesController(fileIds) {
 }
 
 module.exports = {
+  getFileController,
   getFilesController,
   deleteFilesController
 }

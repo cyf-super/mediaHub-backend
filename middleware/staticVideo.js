@@ -9,9 +9,7 @@ module.exports = function () {
       const url = decodeURIComponent(ctx.request.url)
       console.log("🚀 ~ url:", url, url.startsWith('/video'))
       if (url.startsWith('/video')) {
-        console.log("🚀 ~ 111111:", 111111)
         const path = await m3u8(url)
-        console.log("🚀 ~ path:", path)
         ctx.body = path
         //   let range = ctx.headers.range; // 实际上请求头的 Range 视屏调节请求会自动带上开始内容 类似这样 Range: bytes=26214400-
         //   if (!range) {

@@ -17,6 +17,21 @@ async function getFilesServer({ categoryId = '83994e35-c027-475c-889c-ad159b6fa0
   return data
 }
 
+/**
+ * 获取单个文件
+ * @param {*} fileId 
+ */
+async function getFileServer(fileId) {
+  const res = await File.findOne({
+    where: {
+      fileId
+    }
+  })
+  console.log("🚀 ~ getFileServer ~ res:", res)
+
+  return res
+}
+
 
 async function deleteFilesServer(fileIds) {
   try {
@@ -33,6 +48,7 @@ async function deleteFilesServer(fileIds) {
 }
 
 module.exports = {
+  getFileServer,
   getFilesServer,
   deleteFilesServer
 }

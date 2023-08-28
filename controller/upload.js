@@ -3,6 +3,7 @@ const fse = require('fs-extra')
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
 const { fileSizeExceedInfo, uploadFailInfo, uploadSuccessInfo } = require('../model/ErrorInfo')
 const { createFile } = require('../services/upload')
+const m3u8 = require('../utils/transform')
 
 const DIST_FOLDER_PATH = path.join(__dirname, '..', 'uploadFiles')
 fse.pathExists(DIST_FOLDER_PATH).then(exist => {
@@ -31,13 +32,15 @@ async function saveFile({ name, fileId, categoryId, file }) {
 
     filePath = ('\\' + path.relative(path.join(process.cwd(), 'uploadFiles'), filePath)).replace(/\\/g, '/')
 
+    filePath = await m3u8(filePath)
+
     const res = await createFile({ filePath, fileName, fileId, categoryId, file })
     if (res) {
       return new SuccessModel(uploadSuccessInfo)
     }
   } catch (err) {
     console.log("🚀 ~ saveFile ~ err:", err)
-    return new ErrorModel(uploadFailInfo)
+    return new ErrorModel({ ...uploadFailInfo, file })
   }
 }
 
