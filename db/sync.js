@@ -1,7 +1,15 @@
 const seq = require("./seq.js");
+const { up } = require('./modify')
+const { STRING } = require('./types')
+
 
 require("./model/index");
-// require("./model/File");
+
+// up({
+//   type: STRING,
+//   TableName: 'file',
+//   columnName: 'videoImgPath'
+// })
 
 seq
   .authenticate()
@@ -12,6 +20,9 @@ seq
     console.log("err");
   });
 
-seq.sync().then(() => {
+seq.sync({ force: true }).then(() => {
+  console.log('Database synced.');
   process.exit();
+}).catch((error) => {
+  console.error('Error syncing database:', error);
 });

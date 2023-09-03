@@ -2,8 +2,6 @@ const queryInterface = require('sequelize').queryInterface
 const seq = require("./seq.js");
 
 const g = seq.getQueryInterface()
-console.log("🚀 ~ g:", g)
-
 
 module.exports = {
   down: function (TableName, columnName) {

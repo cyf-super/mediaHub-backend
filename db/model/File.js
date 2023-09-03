@@ -1,7 +1,7 @@
 const seq = require('../seq')
 const { STRING, INTEGER } = require("../types");
 
-const File = seq.define('file', {
+const File = seq.define('files', {
   fileId: {
     type: STRING,
     allowNull: false,
@@ -30,11 +30,17 @@ const File = seq.define('file', {
     unique: true,
     comment: '文件路径'
   },
-  categoryId: {
+  videoImgPath: {
     type: STRING,
     allowNull: true,
-    unique: false
+    unique: true,
+    comment: '视频图片路径'
   },
+  categoryId: {
+    type: STRING,
+    allowNull: false,
+    unique: true
+  }
 })
 
 module.exports = File
