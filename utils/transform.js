@@ -28,7 +28,7 @@ module.exports = async function (filePath) {
     fse.pathExists(dirtName).then(exist => {
       if (exist) {
         console.log("🚀 ~ returnnewPromise ~ dirtName:", dirtName)
-        return m3u8
+        return [m3u8, dirtName]
       }
     })
     fse.ensureDir(dirtName)
@@ -36,7 +36,7 @@ module.exports = async function (filePath) {
     await executeCommand(createVideoTs)
     await executeCommand(createM3u8)
 
-    return m3u8
+    return [m3u8, dirtName]
   } catch (err) {
     console.log("🚀 ~ err:", err)
     return null

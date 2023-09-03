@@ -14,16 +14,14 @@ fse.pathExists(DIST_FOLDER_PATH).then(exist => {
 
 const MIX_SIZE = 1024 * 1024 * 204.8
 
-async function saveFile({ name, fileId, categoryId, file }) {
+async function saveFile({ name, fileId, categoryId, files }) {
+  const file = files.file[0]
   const { size, mimetype } = file
-  console.log("🚀 ~ saveFile ~ mimetype:", mimetype)
   if (size > MIX_SIZE) {
     return new ErrorModel(fileSizeExceedInfo)
   }
 
-  const fileDir = path.join(DIST_FOLDER_PATH, mimetype.split('/')[0])
-  const isExists = await fse.pathExists(fileDir)
-  if (!isExists) fse.ensureDir(fileDir)
+  const fileDir = await ensureFileDir(DIST_FOLDER_PATH, mimetype)
 
   try {
     const fileName = Date.now() + '.' + name
@@ -32,9 +30,24 @@ async function saveFile({ name, fileId, categoryId, file }) {
 
     filePath = ('\\' + path.relative(path.join(process.cwd(), 'uploadFiles'), filePath)).replace(/\\/g, '/')
 
-    filePath = await m3u8(filePath)
+    let videoImgPath
+    if (filePath.startsWith('/video')) {
+      console.log("🚀 ~ saveFile ~ filePath:", filePath)
+      const [m3u8Path, dirPath] = await m3u8(filePath)
 
-    const res = await createFile({ filePath, fileName, fileId, categoryId, file })
+      const imgFile = files.poster[0],
+        imgName = imgFile.fieldname + '.png'
+      console.log("🚀 ~ saveFile ~ imgFile:", imgFile)
+
+      await fse.writeFile(path.join(dirPath, imgName), imgFile.buffer)
+      videoImgPath = m3u8Path.replace('index.m3u8', imgName)
+      console.log("🚀 ~ saveFile ~ videoImgPath:", videoImgPath)
+
+      filePath = m3u8Path
+    }
+
+    const options = { filePath, fileName, fileId, categoryId, file, videoImgPath }
+    const res = await createFile(options)
     if (res) {
       return new SuccessModel(uploadSuccessInfo)
     }
@@ -42,6 +55,19 @@ async function saveFile({ name, fileId, categoryId, file }) {
     console.log("🚀 ~ saveFile ~ err:", err)
     return new ErrorModel({ ...uploadFailInfo, file })
   }
+}
+
+async function ensureFileDir(DIST_FOLDER_PATH, mimetype) {
+  let dir = mimetype.split('/')[0]
+  if (mimetype.endsWith('pdf')) {
+    dir = mimetype.split('/').pop()
+  }
+  const fileDir = path.join(DIST_FOLDER_PATH, dir)
+
+  const isExists = await fse.pathExists(fileDir)
+  if (!isExists) fse.ensureDir(fileDir)
+
+  return fileDir
 }
 
 module.exports = {

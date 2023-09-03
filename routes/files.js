@@ -4,8 +4,9 @@ const { getFilesController, deleteFilesController, getFileController } = require
 router.prefix('/api')
 
 // 获取单个文件的信息
-router.get('/file/:fileId', async (ctx) => {
-  const { fileId } = ctx.params
+router.get('/file', async (ctx) => {
+  const { fileId } = ctx.query
+  console.log("🚀 ~ router.get ~ fileId:", fileId)
   ctx.body = await getFileController(fileId)
 })
 

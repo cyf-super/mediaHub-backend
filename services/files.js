@@ -5,10 +5,12 @@ async function getFilesServer({ categoryId = '83994e35-c027-475c-889c-ad159b6fa0
     categoryId
   }
 
+  console.log("🚀 ~ getFilesServer ~ File:", File.findAndCountAll)
   const res = await File.findAndCountAll({
     where: options
   })
 
+  console.log("🚀 ~ getFilesServer ~ data:", res)
   if (!res) return res
   const data = {
     count: res.count,
@@ -29,7 +31,7 @@ async function getFileServer(fileId) {
   })
   console.log("🚀 ~ getFileServer ~ res:", res)
 
-  return res
+  return res?.dataValues
 }
 
 

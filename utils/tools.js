@@ -17,8 +17,8 @@ const getFileName = (path) => {
   if (match.length) {
     const fileName = match[1]
 
-    // return fileName.split('.').slice(0, -1).join('.')
-    return fileName.split('.')[0]
+    return fileName.split('.').slice(0, -1).join('.')
+    // return fileName.split('.')[0]
   }
 
   return null
