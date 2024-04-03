@@ -1,9 +1,6 @@
-const seq = require("./seq.js");
-const { up } = require('./modify')
-const { STRING } = require('./types')
+const seq = require('./seq.js')
 
-
-require("./model/index");
+require('./model/index')
 
 // up({
 //   type: STRING,
@@ -14,15 +11,18 @@ require("./model/index");
 seq
   .authenticate()
   .then(() => {
-    console.log("ok");
+    console.log('ok')
   })
   .catch(() => {
-    console.log("err");
-  });
+    console.log('err')
+  })
 
-seq.sync({ force: true }).then(() => {
-  console.log('Database synced.');
-  process.exit();
-}).catch((error) => {
-  console.error('Error syncing database:', error);
-});
+seq
+  .sync({ force: true })
+  .then(() => {
+    console.log('Database synced.')
+    process.exit()
+  })
+  .catch((error) => {
+    console.error('Error syncing database:', error)
+  })

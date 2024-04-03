@@ -1,6 +1,18 @@
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
-const { categoryExistInfo } = require('../model/ErrorInfo')
-const { getAllCategory, createCategory, hasExistCategory } = require('../services/category')
+const {
+  categoryExistInfo,
+  categoryExistInfo2,
+  deleteCuccessInfo,
+  deleteFailInfo,
+} = require('../model/ErrorInfo')
+const {
+  getAllCategory,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  hasExistCategory,
+  hasExistCategoryById,
+} = require('../services/category')
 const { getUuid } = require('../utils/tools')
 
 /**
@@ -11,6 +23,11 @@ async function categoryCont() {
   return new SuccessModel(data)
 }
 
+/**
+ * 创建分类
+ * @param {*} name
+ * @returns
+ */
 async function createCategoryCont(name) {
   const hasExist = await hasExistCategory(name)
   if (hasExist) {
@@ -22,7 +39,46 @@ async function createCategoryCont(name) {
   return new SuccessModel(data)
 }
 
+/**
+ * 更新名称
+ * @param {*} categoryId
+ * @param {*} name
+ * @returns
+ */
+async function updateCategoryCont(categoryId, name) {
+  const hasExist = await hasExistCategoryById(categoryId)
+  if (!hasExist) {
+    return new ErrorModel(categoryExistInfo2)
+  }
+
+  const data = await updateCategory(categoryId, name)
+  return new SuccessModel(data)
+}
+
+/**
+ * 删除分类
+ * @param {*} categoryId
+ * @returns
+ */
+async function deleteCategoryCont(categoryId) {
+  try {
+    const hasExist = await hasExistCategoryById(categoryId)
+    if (!hasExist) {
+      return new ErrorModel(categoryExistInfo2)
+    }
+
+    await deleteCategory(categoryId)
+    return new SuccessModel(deleteCuccessInfo)
+  } catch (error) {
+    return new SuccessModel(deleteFailInfo)
+  }
+}
+
+// async function changeCategoryCont(categoryId1, categoryId2) {}
+
 module.exports = {
   categoryCont,
-  createCategoryCont
+  createCategoryCont,
+  updateCategoryCont,
+  deleteCategoryCont,
 }

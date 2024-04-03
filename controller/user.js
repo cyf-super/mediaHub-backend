@@ -1,15 +1,19 @@
 const { doBcrypt } = require('../utils/crypto')
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken')
 
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
-const { loginFailInfo, userExistInfo, createUserFailInfo } = require('../model/ErrorInfo')
+const {
+  loginFailInfo,
+  userExistInfo,
+  createUserFailInfo,
+} = require('../model/ErrorInfo')
 const { getUserInfo, createUser } = require('../services/user')
-const { publicKey } = require("../conf/config");
+const { publicKey } = require('../conf/config')
 
 /**
  * 用户是否存在
- * @param {string} username 
- * @returns 
+ * @param {string} username
+ * @returns
  */
 async function isExist(username) {
   const userInfo = await getUserInfo(username)
@@ -21,19 +25,21 @@ async function isExist(username) {
 
 /**
  * 注册
- * @param {object} param0 
+ * @param {object} param0
  */
 async function registerController({ username, password, picture }) {
   const msg = await isExist(username)
+  console.log('msg --> ', msg)
   // 用户已经存在
   if (msg.code !== 0) return msg
 
   const cryptPW = await doBcrypt(password)
+  console.log(cryptPW)
   try {
     await createUser({
       username,
       password: cryptPW,
-      picture
+      picture,
     })
 
     return new SuccessModel()
@@ -44,8 +50,8 @@ async function registerController({ username, password, picture }) {
 
 /**
  * 登陆
- * @param {string} username 
- * @param {string} password 
+ * @param {string} username
+ * @param {string} password
  * @returns
  */
 async function loginController(username, password) {
@@ -54,16 +60,16 @@ async function loginController(username, password) {
     return new ErrorModel(loginFailInfo)
   }
   const res = new SuccessModel(userInfo)
-  const token = jwt.sign(res.data, publicKey, { expiresIn: '1h' });
+  const token = jwt.sign(res.data, publicKey, { expiresIn: '1h' })
 
   return {
     ...res,
-    token
+    token,
   }
 }
 
 module.exports = {
   loginController,
   isExist,
-  registerController
+  registerController,
 }
