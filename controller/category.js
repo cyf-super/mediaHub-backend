@@ -12,6 +12,7 @@ const {
   deleteCategory,
   hasExistCategory,
   hasExistCategoryById,
+  isExistFiles,
 } = require('../services/category')
 const { getUuid } = require('../utils/tools')
 
@@ -64,6 +65,11 @@ async function deleteCategoryCont(categoryId) {
   try {
     const hasExist = await hasExistCategoryById(categoryId)
     if (!hasExist) {
+      return new ErrorModel(categoryExistInfo2)
+    }
+
+    const hasFiles = await isExistFiles(categoryId)
+    if (hasFiles) {
       return new ErrorModel(categoryExistInfo2)
     }
 

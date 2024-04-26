@@ -18,7 +18,7 @@ seq
   })
 
 seq
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log('Database synced.')
     process.exit()

@@ -1,23 +1,29 @@
 const File = require('../db/model/File')
 
 async function createFile(options) {
-  const { filePath, fileName, fileId, categoryId, file, videoImgPath } = options
-  const { mimetype: type, size } = file
-  console.log(1111, options)
-  const res = await File.create({
-    fileId,
-    name: fileName,
-    size,
-    type,
-    path: filePath,
-    categoryId,
-    videoImgPath
-  })
+  try {
+    const { filePath, name, fileName, fileId, categoryId, file, videoImgPath } =
+      options
+    const { mimetype: type, size } = file
+    const params = {
+      fileId,
+      name,
+      fileName,
+      size,
+      type,
+      path: filePath,
+      categoryId,
+      videoImgPath,
+    }
+    const res = await File.create(params)
 
-  console.log("🚀 ~ createFile ~ res.dataValues:", res.dataValues)
-  return res.dataValues
+    console.log('🚀 ~ 上传成功:', res.dataValues)
+    return res.dataValues
+  } catch (error) {
+    console.log('error--> ', error)
+  }
 }
 
 module.exports = {
-  createFile
+  createFile,
 }

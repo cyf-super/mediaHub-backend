@@ -1,4 +1,5 @@
 const FileCategory = require('../db/model/FileCategory')
+const File = require('../db/model/File')
 
 async function hasExistCategory(name) {
   const res = await FileCategory.findOne({
@@ -86,6 +87,16 @@ async function deleteCategory(categoryId) {
   return res
 }
 
+async function isExistFiles(categoryId) {
+  const res = await File.findOne({
+    where: {
+      categoryId,
+    },
+  })
+
+  return !!res
+}
+
 module.exports = {
   getAllCategory,
   createCategory,
@@ -93,4 +104,5 @@ module.exports = {
   deleteCategory,
   hasExistCategory,
   hasExistCategoryById,
+  isExistFiles,
 }

@@ -1,12 +1,16 @@
 const path = require('path')
 const fse = require('fs-extra')
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
-const { fileSizeExceedInfo, uploadFailInfo, uploadSuccessInfo } = require('../model/ErrorInfo')
+const {
+  fileSizeExceedInfo,
+  uploadFailInfo,
+  uploadSuccessInfo,
+} = require('../model/ErrorInfo')
 const { createFile } = require('../services/upload')
 const m3u8 = require('../utils/transform')
 
 const DIST_FOLDER_PATH = path.join(__dirname, '..', 'uploadFiles')
-fse.pathExists(DIST_FOLDER_PATH).then(exist => {
+fse.pathExists(DIST_FOLDER_PATH).then((exist) => {
   if (!exist) {
     fse.ensureDir(DIST_FOLDER_PATH)
   }
@@ -14,7 +18,7 @@ fse.pathExists(DIST_FOLDER_PATH).then(exist => {
 
 const MIX_SIZE = 1024 * 1024 * 204.8
 
-async function saveFile({ name, fileId, categoryId, files }) {
+async function saveFile({ name, categoryId, files }) {
   const file = files.file[0]
   const { size, mimetype } = file
   if (size > MIX_SIZE) {
@@ -28,31 +32,38 @@ async function saveFile({ name, fileId, categoryId, files }) {
     let filePath = path.join(fileDir, fileName)
     await fse.writeFile(filePath, file.buffer)
 
-    filePath = ('\\' + path.relative(path.join(process.cwd(), 'uploadFiles'), filePath)).replace(/\\/g, '/')
+    filePath = (
+      '\\' + path.relative(path.join(process.cwd(), 'uploadFiles'), filePath)
+    ).replace(/\\/g, '/')
 
     let videoImgPath
     if (filePath.startsWith('/video')) {
-      console.log("🚀 ~ saveFile ~ filePath:", filePath)
       const [m3u8Path, dirPath] = await m3u8(filePath)
 
       const imgFile = files.poster[0],
         imgName = imgFile.fieldname + '.png'
-      console.log("🚀 ~ saveFile ~ imgFile:", imgFile)
 
       await fse.writeFile(path.join(dirPath, imgName), imgFile.buffer)
       videoImgPath = m3u8Path.replace('index.m3u8', imgName)
-      console.log("🚀 ~ saveFile ~ videoImgPath:", videoImgPath)
 
       filePath = m3u8Path
     }
 
-    const options = { filePath, fileName, fileId, categoryId, file, videoImgPath }
+    const options = {
+      filePath,
+      name,
+      fileName,
+      fileId: Date.now(),
+      categoryId,
+      file,
+      videoImgPath,
+    }
     const res = await createFile(options)
     if (res) {
       return new SuccessModel(uploadSuccessInfo)
     }
   } catch (err) {
-    console.log("🚀 ~ saveFile ~ err:", err)
+    console.log('🚀 ~ saveFile ~ err:', err)
     return new ErrorModel({ ...uploadFailInfo, file })
   }
 }
@@ -71,5 +82,5 @@ async function ensureFileDir(DIST_FOLDER_PATH, mimetype) {
 }
 
 module.exports = {
-  saveFile
+  saveFile,
 }

@@ -1,3 +1,7 @@
+/**
+ * status: 0-失败，1-成功，2-警告
+ */
+
 // 用户信息
 const userInfo = {
   loginFailInfo: {
@@ -70,7 +74,19 @@ const fileInfo = {
   },
   deleteFileFailInfo: {
     code: '13004',
-    message: '删除文件失败',
+    message: '文件删除失败',
+  },
+  updateFileSuccessInfo: {
+    code: '13005',
+    message: '文件修改成功',
+  },
+  updateFileFailInfo: {
+    code: '13006',
+    message: '文件修改失败',
+  },
+  updateFileFailInfo1: {
+    code: '13007',
+    message: '文件名不能为空',
   },
 }
 

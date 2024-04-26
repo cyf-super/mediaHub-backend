@@ -1,46 +1,45 @@
 const File = require('../db/model/File')
 
-async function getFilesServer({ categoryId = '83994e35-c027-475c-889c-ad159b6fa0a0' }) {
+async function getFilesServer({
+  categoryId = '83994e35-c027-475c-889c-ad159b6fa0a0',
+}) {
   const options = {
-    categoryId
+    categoryId,
   }
 
-  console.log("🚀 ~ getFilesServer ~ File:", File.findAndCountAll)
   const res = await File.findAndCountAll({
-    where: options
+    where: options,
   })
 
-  console.log("🚀 ~ getFilesServer ~ data:", res)
   if (!res) return res
   const data = {
     count: res.count,
-    files: res.rows?.map(row => row.dataValues) || []
+    files: res.rows?.map((row) => row.dataValues) || [],
   }
   return data
 }
 
 /**
  * 获取单个文件
- * @param {*} fileId 
+ * @param {*} fileId
  */
 async function getFileServer(fileId) {
   const res = await File.findOne({
     where: {
-      fileId
-    }
+      fileId,
+    },
   })
-  console.log("🚀 ~ getFileServer ~ res:", res)
+  console.log('🚀 ~ getFileServer ~ res:', res)
 
   return res?.dataValues
 }
-
 
 async function deleteFilesServer(fileIds) {
   try {
     const res = await File.destroy({
       where: {
-        fileId: fileIds
-      }
+        fileId: fileIds,
+      },
     })
 
     return res
@@ -49,8 +48,30 @@ async function deleteFilesServer(fileIds) {
   }
 }
 
+async function updateFileServer({ fileId, name }) {
+  try {
+    const res = await File.update(
+      {
+        name,
+      },
+      {
+        where: {
+          fileId,
+        },
+      }
+    )
+
+    console.log(res, res.length)
+    return res.length > 0
+  } catch (error) {
+    console.log('error--> ', error)
+    return 0
+  }
+}
+
 module.exports = {
   getFileServer,
   getFilesServer,
-  deleteFilesServer
+  deleteFilesServer,
+  updateFileServer,
 }
