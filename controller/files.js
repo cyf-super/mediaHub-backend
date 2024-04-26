@@ -35,12 +35,12 @@ async function getFileController(fileId) {
 }
 
 /**
- * 根据类别id获取文件
+ * 获取文件
  * @param {*} param0
  * @returns
  */
-async function getFilesController({ categoryId }) {
-  const res = await getFilesServer({ categoryId })
+async function getFilesController({ categoryId, pageSize, currentPage }) {
+  const res = await getFilesServer({ categoryId, pageSize, currentPage })
   if (!res) {
     return new ErrorModel(fileRequestFailInfo)
   }

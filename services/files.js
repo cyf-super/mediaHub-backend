@@ -1,22 +1,29 @@
 const File = require('../db/model/File')
 
-async function getFilesServer({
-  categoryId = '83994e35-c027-475c-889c-ad159b6fa0a0',
-}) {
-  const options = {
+async function getFilesServer({ categoryId = 'all', pageSize, currentPage }) {
+  let options = {
     categoryId,
   }
-
-  const res = await File.findAndCountAll({
-    where: options,
-  })
-
-  if (!res) return res
-  const data = {
-    count: res.count,
-    files: res.rows?.map((row) => row.dataValues) || [],
+  if (categoryId === 'all') {
+    options = {}
   }
-  return data
+
+  try {
+    const res = await File.findAndCountAll({
+      where: options,
+      offset: (+currentPage - 1) * +pageSize,
+      limit: +pageSize,
+    })
+
+    if (!res) return res
+    const data = {
+      count: res.count,
+      files: res.rows?.map((row) => row.dataValues) || [],
+    }
+    return data
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 /**

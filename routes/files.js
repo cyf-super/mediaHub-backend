@@ -15,10 +15,10 @@ router.get('/file', async (ctx) => {
   ctx.body = await getFileController(fileId)
 })
 
-// 获取批量文件
+// 获取文件
 router.get('/files', async (ctx) => {
-  const { categoryId } = ctx.query
-  ctx.body = await getFilesController({ categoryId })
+  const { categoryId, pageSize, currentPage } = ctx.query
+  ctx.body = await getFilesController({ categoryId, pageSize, currentPage })
 })
 
 // 删除单个/批量文件
