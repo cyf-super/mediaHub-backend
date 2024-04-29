@@ -1,12 +1,24 @@
 const File = require('../db/model/File')
+const seq = require('sequelize')
 
-async function getFilesServer({ categoryId = 'all', pageSize, currentPage }) {
+const Op = seq.Op
+
+async function getFilesServer({
+  categoryId = 'all',
+  name,
+  pageSize,
+  currentPage,
+}) {
   let options = {
-    categoryId,
+    name: {
+      [Op.like]: `%${name}%`,
+    },
   }
-  if (categoryId === 'all') {
-    options = {}
+  if (categoryId !== 'all') {
+    options.categoryId = categoryId
   }
+
+  console.log('options--> ', categoryId, options)
 
   try {
     const res = await File.findAndCountAll({

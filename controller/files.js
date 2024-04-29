@@ -39,8 +39,8 @@ async function getFileController(fileId) {
  * @param {*} param0
  * @returns
  */
-async function getFilesController({ categoryId, pageSize, currentPage }) {
-  const res = await getFilesServer({ categoryId, pageSize, currentPage })
+async function getFilesController(options) {
+  const res = await getFilesServer(options)
   if (!res) {
     return new ErrorModel(fileRequestFailInfo)
   }
