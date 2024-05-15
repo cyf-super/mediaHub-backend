@@ -1,6 +1,7 @@
 const router = require('koa-router')()
 const multer = require('@koa/multer')
 const { saveFile } = require('../controller/upload')
+const { swpierUploadControll } = require('../controller/setting')
 
 router.prefix('/api')
 
@@ -9,6 +10,16 @@ const upload = multer({
     // fileSize: 200 * 1024 * 1024
   },
 })
+
+router.post(
+  '/setting-swiper',
+  upload.fields([{ name: 'file', maxCount: 10 }]),
+  async (ctx) => {
+    const files = ctx.files
+    const { list } = ctx.request.body
+    ctx.body = await swpierUploadControll(files.file, JSON.parse(list))
+  }
+)
 
 router.post(
   '/upload',
@@ -20,13 +31,6 @@ router.post(
     console.log(22222, ctx.files)
     const files = ctx.files
     const { categoryId, fileId, name } = ctx.request.body
-    console.log(
-      '🚀 ~ ]), ~ categoryId, fileId, name:',
-      categoryId,
-      fileId,
-      name,
-      files.file
-    )
     ctx.body = await saveFile({ fileId, categoryId, name, files })
   }
 )

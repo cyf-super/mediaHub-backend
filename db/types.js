@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require('sequelize')
 
 module.exports = {
   STRING: Sequelize.STRING,
@@ -6,4 +6,5 @@ module.exports = {
   TEXT: Sequelize.TEXT,
   INTEGER: Sequelize.INTEGER,
   BOOLEAN: Sequelize.BOOLEAN,
-};
+  ARRAY: Sequelize.ARRAY,
+}

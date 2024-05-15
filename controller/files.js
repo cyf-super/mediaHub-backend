@@ -1,4 +1,3 @@
-const fse = require('fs-extra')
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
 const {
   fileRequestFailInfo,
@@ -19,7 +18,8 @@ const {
   getFileNameSuffix,
   getUploadFilesDir,
   getFileType,
-} = require('../utils/tools')
+  removeFile,
+} = require('../utils/file')
 
 /**
  * 获取单个文件
@@ -44,7 +44,6 @@ async function getFilesController(options) {
   if (!res) {
     return new ErrorModel(fileRequestFailInfo)
   }
-
   return new SuccessModel(res)
 }
 
@@ -94,15 +93,4 @@ module.exports = {
   getFilesController,
   deleteFilesController,
   updateFileController,
-}
-
-async function removeFile(path) {
-  try {
-    const exist = await fse.pathExists(path)
-    if (exist) {
-      await fse.remove(path)
-    }
-  } catch (error) {
-    console.log('error--> ', error)
-  }
 }

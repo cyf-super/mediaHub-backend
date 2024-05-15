@@ -17,7 +17,6 @@ async function createFile(options) {
     }
     const res = await File.create(params)
 
-    console.log('🚀 ~ 上传成功:', res.dataValues)
     return res.dataValues
   } catch (error) {
     console.log('error--> ', error)

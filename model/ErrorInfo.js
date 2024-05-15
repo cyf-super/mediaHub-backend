@@ -90,6 +90,22 @@ const fileInfo = {
   },
 }
 
+// 设置信息
+const settingInfo = {
+  settingSwiperSuccessInfo: {
+    code: '14001',
+    message: '轮播图设置成功',
+  },
+  settingSwiperFailInfo: {
+    code: '14002',
+    message: '轮播图设置失败',
+  },
+  getSwiperFailInfo: {
+    code: '14003',
+    message: '获取轮播图失败',
+  },
+}
+
 const public = {
   deleteCuccessInfo: {
     code: '14001',
@@ -106,5 +122,6 @@ module.exports = {
   ...categoryInfo,
   ...uploadInfo,
   ...fileInfo,
+  ...settingInfo,
   ...public,
 }

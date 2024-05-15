@@ -18,8 +18,6 @@ async function getFilesServer({
     options.categoryId = categoryId
   }
 
-  console.log('options--> ', categoryId, options)
-
   try {
     const res = await File.findAndCountAll({
       where: options,
@@ -48,7 +46,6 @@ async function getFileServer(fileId) {
       fileId,
     },
   })
-  console.log('🚀 ~ getFileServer ~ res:', res)
 
   return res?.dataValues
 }

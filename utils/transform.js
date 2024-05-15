@@ -1,7 +1,7 @@
 const fse = require('fs-extra')
 const path = require('path')
 const { exec } = require('child_process')
-const { getFileName } = require('./tools')
+const { getFileName } = require('./file')
 
 const DIST_FFMPEG_PATH = path.join(__dirname, '..', 'uploadFiles/ffmpeg')
 fse.pathExists(DIST_FFMPEG_PATH).then((exist) => {

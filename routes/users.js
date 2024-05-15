@@ -9,10 +9,7 @@ router.prefix('/api')
 
 router.post('/register', validateUser(), async (ctx) => {
   const { username, password, picture } = ctx.request.body
-  console.log('11111---> ', username, password, picture)
   const data = await registerController({ username, password, picture })
-  console.log('data---> ', data)
-
   ctx.body = data
 })
 
