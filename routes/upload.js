@@ -28,7 +28,6 @@ router.post(
     { name: 'poster', maxCount: 1 },
   ]),
   async (ctx) => {
-    console.log(22222, ctx.files)
     const files = ctx.files
     const { categoryId, fileId, name } = ctx.request.body
     ctx.body = await saveFile({ fileId, categoryId, name, files })

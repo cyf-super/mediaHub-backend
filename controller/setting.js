@@ -2,7 +2,11 @@ const path = require('path')
 const fse = require('fs-extra')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { setUploadsDir, getAllFiles, removeFile } = require('../utils/file')
-const { swpierUploadService, getSwiperService } = require('../services/setting')
+const {
+  swpierUploadService,
+  getSwiperService,
+  updateUserInfoService,
+} = require('../services/setting')
 const {
   settingSwiperSuccessInfo,
   settingSwiperFailInfo,
@@ -23,16 +27,12 @@ setUploadsDir(swiperDir)
  */
 async function swpierUploadControll(files, list) {
   await setUploadsDir(swiperDir)
-  console.log('2222--> ', files, list)
   try {
     const swiperList = [...list]
     const noEmptyFiles = list.filter((item) => item.src)
 
-    // const swiperDir = getUploadFilesDir('swiper')
     const imgArrs = []
     getAllFiles(swiperDir, imgArrs)
-
-    console.log('33333 ', imgArrs, noEmptyFiles)
 
     if (noEmptyFiles.length === list.length) {
       // 只是更换顺序 -> 直接写入数据库
@@ -42,6 +42,7 @@ async function swpierUploadControll(files, list) {
       files.forEach(async (file, index) => {
         const fileName =
           Date.now() +
+          Math.floor(10000 * Math.random()) +
           '.' +
           Buffer.from(file.originalname, 'latin1').toString('utf8')
         swiperList[index].src = '/swiper/' + fileName
@@ -61,8 +62,10 @@ async function swpierUploadControll(files, list) {
       imgArrs.forEach((path) => removeFile(path))
 
       files.forEach(async (file) => {
+        const now = Date.now()
         const fileName =
-          Date.now() +
+          now +
+          Math.floor(now * Math.random()) +
           '.' +
           Buffer.from(file.originalname, 'latin1').toString('utf8')
         filePahtArr.push('/swiper/' + fileName)
@@ -78,7 +81,6 @@ async function swpierUploadControll(files, list) {
       })
     }
 
-    console.log('swiperList ', swiperList)
     await swpierUploadService(swiperList)
     return new SuccessModel(settingSwiperSuccessInfo)
   } catch (error) {
@@ -100,7 +102,22 @@ async function getSwiperController() {
   }
 }
 
+/**
+ * 更新用户信息
+ * @param {*} info
+ * @returns
+ */
+async function updateUserInfoController(info) {
+  try {
+    await updateUserInfoService(info)
+    return new SuccessModel()
+  } catch (error) {
+    return new ErrorModel()
+  }
+}
+
 module.exports = {
   swpierUploadControll,
   getSwiperController,
+  updateUserInfoController,
 }
