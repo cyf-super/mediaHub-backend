@@ -115,6 +115,10 @@ const public = {
     code: '14002',
     message: '删除失败',
   },
+  handleFailInfo: {
+    code: '14003',
+    message: '操作失败～',
+  },
 }
 
 module.exports = {

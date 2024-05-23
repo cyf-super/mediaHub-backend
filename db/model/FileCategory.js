@@ -1,5 +1,5 @@
 const seq = require('../seq')
-const { STRING } = require('../types')
+const { STRING, INTEGER } = require('../types')
 
 const FileCategory = seq.define('fileCategory', {
   categoryId: {
@@ -13,6 +13,12 @@ const FileCategory = seq.define('fileCategory', {
     allowNull: false,
     unique: true,
     comment: '类别名',
+  },
+  order: {
+    type: INTEGER,
+    allowNull: false,
+    unique: true,
+    comment: '排序',
   },
 })
 

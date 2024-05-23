@@ -26,7 +26,9 @@ async function hasExistCategoryById(categoryId) {
  * @returns
  */
 async function getAllCategory() {
-  const data = await FileCategory.findAndCountAll()
+  const data = await FileCategory.findAndCountAll({
+    order: [['order', 'ASC']],
+  })
   if (!data) return data
 
   const res = data.rows.map((category) => category.dataValues)
@@ -97,6 +99,26 @@ async function isExistFiles(categoryId) {
   return !!res
 }
 
+async function swapCategoryContService(categoryIds) {
+  const categories = await FileCategory.findAll({
+    where: {
+      categoryId: categoryIds,
+    },
+    order: [['categoryId', 'ASC']],
+  })
+
+  for (let i = 0; i < categories.length; i++) {
+    const index = categoryIds.findIndex(
+      (categoryId) => categoryId === categories[i].dataValues.categoryId
+    )
+    if (index > -1) {
+      await categories[i].update({
+        order: index,
+      })
+    }
+  }
+}
+
 module.exports = {
   getAllCategory,
   createCategory,
@@ -105,4 +127,5 @@ module.exports = {
   hasExistCategory,
   hasExistCategoryById,
   isExistFiles,
+  swapCategoryContService,
 }

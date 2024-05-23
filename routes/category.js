@@ -4,6 +4,7 @@ const {
   createCategoryCont,
   updateCategoryCont,
   deleteCategoryCont,
+  swapCategoryCont,
 } = require('../controller/category')
 
 router.prefix('/api')
@@ -29,6 +30,11 @@ router.delete('/file-category', async (ctx) => {
   const { categoryId } = ctx.request.body
   const data = await deleteCategoryCont(categoryId)
   ctx.body = data
+})
+
+router.post('/swap-category', async (ctx) => {
+  const { categoryIds } = ctx.request.body
+  ctx.body = await swapCategoryCont(categoryIds)
 })
 
 module.exports = router

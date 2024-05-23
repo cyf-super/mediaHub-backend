@@ -4,6 +4,7 @@ const {
   categoryExistInfo2,
   deleteCuccessInfo,
   deleteFailInfo,
+  handleFailInfo,
 } = require('../model/ErrorInfo')
 const {
   getAllCategory,
@@ -13,6 +14,7 @@ const {
   hasExistCategory,
   hasExistCategoryById,
   isExistFiles,
+  swapCategoryContService,
 } = require('../services/category')
 const { getUuid } = require('../utils/tools')
 
@@ -80,11 +82,20 @@ async function deleteCategoryCont(categoryId) {
   }
 }
 
-// async function changeCategoryCont(categoryId1, categoryId2) {}
+async function swapCategoryCont(categoryIds) {
+  console.log('categoryIds ', categoryIds)
+  try {
+    await swapCategoryContService(categoryIds)
+    return new SuccessModel()
+  } catch (error) {
+    return new ErrorModel(handleFailInfo)
+  }
+}
 
 module.exports = {
   categoryCont,
   createCategoryCont,
   updateCategoryCont,
   deleteCategoryCont,
+  swapCategoryCont,
 }
