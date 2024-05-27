@@ -2,7 +2,11 @@ const router = require('koa-router')()
 const jwt = require('jsonwebtoken')
 
 const { publicKey } = require('../conf/config')
-const { loginController, registerController } = require('../controller/user')
+const {
+  loginController,
+  registerController,
+  updateUserInfoController,
+} = require('../controller/user')
 const { validateUser } = require('../middleware/Validator')
 
 router.prefix('/api')
@@ -30,6 +34,11 @@ router.get('/user', function (ctx) {
   ctx.body = {
     info,
   }
+})
+
+router.put('/user-info', async (ctx) => {
+  const { nickname, picture } = ctx.body
+  ctx.body = await updateUserInfoController({ nickname, picture })
 })
 
 module.exports = router

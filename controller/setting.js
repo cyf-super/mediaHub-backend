@@ -2,11 +2,7 @@ const path = require('path')
 const fse = require('fs-extra')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
 const { setUploadsDir, getAllFiles, removeFile } = require('../utils/file')
-const {
-  swpierUploadService,
-  getSwiperService,
-  updateUserInfoService,
-} = require('../services/setting')
+const { swpierUploadService, getSwiperService } = require('../services/setting')
 const {
   settingSwiperSuccessInfo,
   settingSwiperFailInfo,
@@ -102,22 +98,7 @@ async function getSwiperController() {
   }
 }
 
-/**
- * 更新用户信息
- * @param {*} info
- * @returns
- */
-async function updateUserInfoController(info) {
-  try {
-    await updateUserInfoService(info)
-    return new SuccessModel()
-  } catch (error) {
-    return new ErrorModel()
-  }
-}
-
 module.exports = {
   swpierUploadControll,
   getSwiperController,
-  updateUserInfoController,
 }

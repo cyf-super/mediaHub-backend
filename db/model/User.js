@@ -2,6 +2,11 @@ const seq = require('../seq')
 const { STRING, DECIMAL } = require('../types')
 
 const User = seq.define('users', {
+  userId: {
+    type: STRING,
+    allowNull: false,
+    unique: true,
+  },
   username: {
     type: STRING,
     allowNull: false,

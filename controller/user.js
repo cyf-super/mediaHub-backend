@@ -6,8 +6,14 @@ const {
   loginFailInfo,
   userExistInfo,
   createUserFailInfo,
+  loginFailInfo1,
 } = require('../model/ErrorInfo')
-const { getUserInfo, createUser } = require('../services/user')
+const {
+  getUserInfo,
+  createUser,
+  loginService,
+  updateUserInfoService,
+} = require('../services/user')
 const { publicKey } = require('../conf/config')
 
 /**
@@ -29,7 +35,6 @@ async function isExist(username) {
  */
 async function registerController({ username, password, picture }) {
   const msg = await isExist(username)
-  console.log('msg --> ', msg)
   // 用户已经存在
   if (msg.code !== 0) return msg
 
@@ -55,16 +60,34 @@ async function registerController({ username, password, picture }) {
  * @returns
  */
 async function loginController(username, password) {
-  const userInfo = await getUserInfo(username, password)
-  if (!userInfo) {
-    return new ErrorModel(loginFailInfo)
-  }
-  const res = new SuccessModel(userInfo)
-  const token = jwt.sign(res.data, publicKey, { expiresIn: '1h' })
+  try {
+    const userInfo = await loginService(username, password)
+    if (!userInfo) {
+      return new ErrorModel(loginFailInfo)
+    }
+    const res = new SuccessModel(userInfo)
+    const token = jwt.sign(res.data, publicKey, { expiresIn: '1h' })
 
-  return {
-    ...res,
-    token,
+    return {
+      ...res,
+      token,
+    }
+  } catch (error) {
+    return new ErrorModel(loginFailInfo1)
+  }
+}
+
+/**
+ * 更新用户信息
+ * @param {*} info
+ * @returns
+ */
+async function updateUserInfoController(info) {
+  try {
+    await updateUserInfoService(info)
+    return new SuccessModel()
+  } catch (error) {
+    return new ErrorModel()
   }
 }
 
@@ -72,4 +95,5 @@ module.exports = {
   loginController,
   isExist,
   registerController,
+  updateUserInfoController,
 }

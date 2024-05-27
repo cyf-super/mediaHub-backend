@@ -28,6 +28,10 @@ const userInfo = {
         'Authentication Error, use the correct Authorization header to get access.',
     },
   },
+  loginFailInfo1: {
+    code: '10006',
+    message: '登录失败',
+  },
 }
 
 // 类别

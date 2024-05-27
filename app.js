@@ -43,6 +43,8 @@ app.use(
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()
+  const user = ctx.state.user
+  console.log('user ', user)
   await next()
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
