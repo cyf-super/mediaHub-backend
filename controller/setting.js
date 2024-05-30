@@ -1,19 +1,16 @@
 const path = require('path')
 const fse = require('fs-extra')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { setUploadsDir, getAllFiles, removeFile } = require('../utils/file')
+const { getAllFiles, removeFile } = require('../utils/file')
 const { swpierUploadService, getSwiperService } = require('../services/setting')
 const {
   settingSwiperSuccessInfo,
   settingSwiperFailInfo,
   getSwiperFailInfo,
 } = require('../model/ErrorInfo')
+const { getSubUploadFilesPath, transformBuffer } = require('../utils/tools')
 
-const DIST_FOLDER_PATH = path.join(__dirname, '..', 'uploadFiles')
-const swiperDir = path.join(DIST_FOLDER_PATH, 'swiper')
-
-setUploadsDir(DIST_FOLDER_PATH)
-setUploadsDir(swiperDir)
+const swiperDir = getSubUploadFilesPath('swiper')
 
 /**
  * 上传轮播图
@@ -22,7 +19,6 @@ setUploadsDir(swiperDir)
  * @returns
  */
 async function swpierUploadControll(files, list) {
-  await setUploadsDir(swiperDir)
   try {
     const swiperList = [...list]
     const noEmptyFiles = list.filter((item) => item.src)
@@ -40,14 +36,14 @@ async function swpierUploadControll(files, list) {
           Date.now() +
           Math.floor(10000 * Math.random()) +
           '.' +
-          Buffer.from(file.originalname, 'latin1').toString('utf8')
+          transformBuffer(file.originalname)
         swiperList[index].src = '/swiper/' + fileName
         let filePath = path.join(swiperDir, fileName)
         await fse.writeFile(filePath, file.buffer)
       })
     } else {
       // 有更新有删除 -> 删除废弃文件、写入新文件
-      const filePahtArr = []
+      const filePathArr = []
 
       list.forEach((item) => {
         if (item.src) {
@@ -64,14 +60,14 @@ async function swpierUploadControll(files, list) {
           Math.floor(now * Math.random()) +
           '.' +
           Buffer.from(file.originalname, 'latin1').toString('utf8')
-        filePahtArr.push('/swiper/' + fileName)
+        filePathArr.push('/swiper/' + fileName)
         let filePath = path.join(swiperDir, fileName)
         await fse.writeFile(filePath, file.buffer)
       })
 
       list.forEach((item) => {
         if (!item.src) {
-          const src = filePahtArr.shift()
+          const src = filePathArr.shift()
           item.src = src
         }
       })

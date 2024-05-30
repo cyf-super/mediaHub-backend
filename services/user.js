@@ -87,29 +87,16 @@ async function createUser({
  * @param {*} info
  */
 async function updateUserInfoService(info) {
-  const res = await User.findOne({
-    where: {
-      username: info.username,
+  await User.update(
+    {
+      ...info,
     },
-  })
-  console.log('info ', info)
-
-  if (res.count) {
-    await User.update(
-      {
-        ...deleteEmptyObject(info),
+    {
+      where: {
+        userId: info.userId,
       },
-      {
-        where: {
-          username: info.username,
-        },
-      }
-    )
-  } else {
-    await User.create({
-      ...deleteEmptyObject(info),
-    })
-  }
+    }
+  )
 }
 
 module.exports = {
@@ -117,15 +104,4 @@ module.exports = {
   createUser,
   loginService,
   updateUserInfoService,
-}
-
-function deleteEmptyObject(obj) {
-  const newObj = { ...obj }
-  for (let key in newObj) {
-    if (!newObj[key]) {
-      delete newObj[key]
-    }
-  }
-
-  return newObj
 }

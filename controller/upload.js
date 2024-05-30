@@ -10,11 +10,6 @@ const { createFile } = require('../services/upload')
 const m3u8 = require('../utils/transform')
 
 const DIST_FOLDER_PATH = path.join(__dirname, '..', 'uploadFiles')
-fse.pathExists(DIST_FOLDER_PATH).then((exist) => {
-  if (!exist) {
-    fse.ensureDir(DIST_FOLDER_PATH)
-  }
-})
 
 const MIX_SIZE = 1024 * 1024 * 204.8
 

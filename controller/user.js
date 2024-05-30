@@ -1,5 +1,7 @@
 const { doBcrypt } = require('../utils/crypto')
 const jwt = require('jsonwebtoken')
+const path = require('path')
+const fse = require('fs-extra')
 
 const { ErrorModel, SuccessModel } = require('../model/ResModel')
 const {
@@ -7,6 +9,7 @@ const {
   userExistInfo,
   createUserFailInfo,
   loginFailInfo1,
+  handleFailInfo,
 } = require('../model/ErrorInfo')
 const {
   getUserInfo,
@@ -15,6 +18,12 @@ const {
   updateUserInfoService,
 } = require('../services/user')
 const { publicKey } = require('../conf/config')
+const { removeFileByPrefix, getUploadFilesDir } = require('../utils/file')
+const {
+  deleteEmptyObject,
+  transformBuffer,
+  transformAbsolutePath,
+} = require('../utils/tools')
 
 /**
  * 用户是否存在
@@ -82,12 +91,29 @@ async function loginController(username, password) {
  * @param {*} info
  * @returns
  */
-async function updateUserInfoController(info) {
+async function updateUserInfoController(info, file) {
+  const params = {
+    ...info,
+  }
+  // 如果有上传图片
+  if (file) {
+    removeFileByPrefix('setting')
+    const fileDir = getUploadFilesDir('setting')
+    const fileName = `setting-${Date.now()}-${transformBuffer(
+      file.originalname
+    )}`
+    let filePath = path.join(fileDir, fileName)
+    fse.writeFile(filePath, file.buffer)
+    params.picture = transformAbsolutePath(filePath)
+  }
+  if (params.password) {
+    params.password = await doBcrypt(params.password)
+  }
   try {
-    await updateUserInfoService(info)
+    await updateUserInfoService(deleteEmptyObject(params))
     return new SuccessModel()
   } catch (error) {
-    return new ErrorModel()
+    return new ErrorModel(handleFailInfo)
   }
 }
 

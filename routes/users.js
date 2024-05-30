@@ -1,6 +1,6 @@
 const router = require('koa-router')()
 const jwt = require('jsonwebtoken')
-
+const multer = require('@koa/multer')
 const { publicKey } = require('../conf/config')
 const {
   loginController,
@@ -10,6 +10,8 @@ const {
 const { validateUser } = require('../middleware/Validator')
 
 router.prefix('/api')
+
+const upload = multer({})
 
 router.post('/register', validateUser(), async (ctx) => {
   const { username, password, picture } = ctx.request.body
@@ -36,9 +38,20 @@ router.get('/user', function (ctx) {
   }
 })
 
-router.put('/user-info', async (ctx) => {
-  const { nickname, picture } = ctx.body
-  ctx.body = await updateUserInfoController({ nickname, picture })
-})
+router.post(
+  '/user-info',
+  upload.fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'info', maxCount: 1 },
+  ]),
+  async (ctx) => {
+    const files = ctx.files
+    const { info } = ctx.request.body
+    ctx.body = await updateUserInfoController(
+      JSON.parse(info),
+      files?.file?.[0]
+    )
+  }
+)
 
 module.exports = router

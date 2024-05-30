@@ -51,7 +51,12 @@ const getFileType = (type) => {
   return typeMap[type] || type
 }
 
-const setUploadsDir = async (dir) => {
+/**
+ * 添加目录
+ * @param {*} dir
+ * @returns
+ */
+const addDir = async (dir) => {
   const exist = await fse.pathExists(dir)
   if (!exist) {
     fse.ensureDir(dir)
@@ -59,6 +64,10 @@ const setUploadsDir = async (dir) => {
   return dir
 }
 
+/**
+ * 移除文件
+ * @param {*} path
+ */
 async function removeFile(path) {
   try {
     const exist = await fse.pathExists(path)
@@ -70,12 +79,31 @@ async function removeFile(path) {
   }
 }
 
+/**
+ * 删除某个目录下前缀为prefix的文件
+ * @param {*} prefix
+ */
+async function removeFileByPrefix(prefix, dir = 'setting') {
+  const arr = []
+  const newDir = getUploadFilesDir(dir)
+  getAllFiles(newDir, arr)
+  if (arr.length) {
+    arr.forEach((src) => {
+      const name = getFileName(src)
+      if (name.startsWith(prefix)) {
+        removeFile(src)
+      }
+    })
+  }
+}
+
 module.exports = {
   getFileName,
   getFileType,
-  setUploadsDir,
+  addDir,
   removeFile,
   getAllFiles,
   getFileNameSuffix,
   getUploadFilesDir,
+  removeFileByPrefix,
 }
