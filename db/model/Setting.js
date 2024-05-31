@@ -8,7 +8,10 @@ const Setting = seq.define('settings', {
     defaultValue: [],
     comment: '轮播图',
   },
-  title: {
+  websiteName: {
+    type: STRING,
+  },
+  logo: {
     type: STRING,
   },
 })

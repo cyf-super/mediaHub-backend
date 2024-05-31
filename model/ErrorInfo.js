@@ -108,6 +108,10 @@ const settingInfo = {
     code: '14003',
     message: '获取轮播图失败',
   },
+  getWebsiteFailInfo: {
+    code: '14004',
+    message: '获取网站信息失败',
+  },
 }
 
 const public = {

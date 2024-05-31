@@ -16,7 +16,8 @@ async function swpierUploadService(swiper) {
   } else {
     await Setting.create({
       swiper,
-      title: '',
+      websiteName: '',
+      logo: '',
     })
   }
 }
@@ -32,7 +33,38 @@ async function getSwiperService() {
   return res.rows?.map((row) => row.dataValues.swiper)[0] || []
 }
 
+/**
+ * 获取网站信息
+ * @returns
+ */
+async function getWebsiteInfoService() {
+  const res = await Setting.findAndCountAll({
+    attributes: ['websiteName', 'logo'],
+  })
+
+  return res.rows?.map((row) => row.dataValues)[0] || {}
+}
+
+async function updateWebsiteService(info) {
+  const res = await Setting.findAndCountAll()
+  if (res.count) {
+    await Setting.update(
+      {
+        ...info,
+      },
+      { where: {} }
+    )
+  } else {
+    await Setting.create({
+      ...info,
+      swiper: '[]',
+    })
+  }
+}
+
 module.exports = {
   swpierUploadService,
   getSwiperService,
+  getWebsiteInfoService,
+  updateWebsiteService,
 }

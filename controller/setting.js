@@ -1,14 +1,31 @@
 const path = require('path')
 const fse = require('fs-extra')
 const { SuccessModel, ErrorModel } = require('../model/ResModel')
-const { getAllFiles, removeFile } = require('../utils/file')
-const { swpierUploadService, getSwiperService } = require('../services/setting')
+const {
+  getAllFiles,
+  removeFile,
+  removeFileByPrefix,
+  getUploadFilesDir,
+} = require('../utils/file')
+const {
+  swpierUploadService,
+  getSwiperService,
+  getWebsiteInfoService,
+  updateWebsiteService,
+} = require('../services/setting')
 const {
   settingSwiperSuccessInfo,
   settingSwiperFailInfo,
   getSwiperFailInfo,
+  handleFailInfo,
+  getWebsiteFailInfo,
 } = require('../model/ErrorInfo')
-const { getSubUploadFilesPath, transformBuffer } = require('../utils/tools')
+const {
+  getSubUploadFilesPath,
+  transformBuffer,
+  transformAbsolutePath,
+  deleteEmptyObject,
+} = require('../utils/tools')
 
 const swiperDir = getSubUploadFilesPath('swiper')
 
@@ -94,7 +111,47 @@ async function getSwiperController() {
   }
 }
 
+async function getWebsiteInfoController() {
+  try {
+    const data = await getWebsiteInfoService()
+    return new SuccessModel(data)
+  } catch (error) {
+    return new ErrorModel(getWebsiteFailInfo)
+  }
+}
+
+/**
+ * 更新网站信息
+ * @param {*} info
+ * @param {*} file
+ * @returns
+ */
+async function updateWebsiteController(info, file) {
+  const params = { ...info }
+  try {
+    if (file) {
+      removeFileByPrefix('logo')
+      const fileDir = getUploadFilesDir('setting')
+      const fileName = `logo-${Date.now()}-${transformBuffer(
+        file.originalname
+      )}`
+      let filePath = path.join(fileDir, fileName)
+      fse.writeFile(filePath, file.buffer)
+      params.logo = transformAbsolutePath(filePath)
+    }
+
+    await updateWebsiteService(deleteEmptyObject(params))
+    const data = await getWebsiteInfoService()
+    return new SuccessModel(data)
+  } catch (error) {
+    console.log('error ', error)
+    return new ErrorModel(handleFailInfo)
+  }
+}
+
 module.exports = {
   swpierUploadControll,
   getSwiperController,
+  updateWebsiteController,
+  getWebsiteInfoController,
 }

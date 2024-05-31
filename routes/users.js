@@ -38,6 +38,7 @@ router.get('/user', function (ctx) {
   }
 })
 
+// 修改用户信息
 router.post(
   '/user-info',
   upload.fields([

@@ -31,7 +31,7 @@ const {
  * @returns
  */
 async function isExist(username) {
-  const userInfo = await getUserInfo(username)
+  const userInfo = await getUserInfo({ username })
   if (userInfo) {
     return new ErrorModel(userExistInfo)
   }
@@ -111,7 +111,9 @@ async function updateUserInfoController(info, file) {
   }
   try {
     await updateUserInfoService(deleteEmptyObject(params))
-    return new SuccessModel()
+    const data = await getUserInfo({ userId: params.userId })
+    delete data.password
+    return new SuccessModel(data)
   } catch (error) {
     return new ErrorModel(handleFailInfo)
   }

@@ -7,11 +7,7 @@ const { compareBcrypt } = require('../utils/crypto')
  * @param {string} password
  * @returns
  */
-async function getUserInfo(username) {
-  const whereOpt = {
-    username,
-  }
-
+async function getUserInfo(whereOpt) {
   const userInfo = await User.findOne({
     where: whereOpt,
     attributes: [
@@ -38,7 +34,7 @@ async function getUserInfo(username) {
  * @returns
  */
 async function loginService(username, password) {
-  const userInfo = await getUserInfo(username)
+  const userInfo = await getUserInfo({ username })
 
   if (!userInfo) {
     return userInfo
