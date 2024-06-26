@@ -14,11 +14,11 @@ db.js：数据库相关配置
 
 ```
 let MYSQL_CONF = {
-  host: xxx,
+  host: xxx,  // 域名
   user: xxx,
   password: xxx,
-  pord: xxx,
-  database: xxx,
+  pord: xxx,  // 端口号
+  database: xxx,  // 数据库名称
 };
 
 module.exports = {
