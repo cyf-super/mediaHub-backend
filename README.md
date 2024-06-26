@@ -14,14 +14,14 @@ db.js：数据库相关配置
 
 ```
 let MYSQL_CONF = {
-  host: xxx,
-  user: xxx,
-  password: xxx,
-  pord: xxx,
-  database: xxx,
+  host: 'localhost', // 域名，本地为localhost
+  user: 'xxx', // 账号
+  password: 'xxx', // 密码
+  pord: 3306, // 端口号 默认为 3306
+  database: 'xxxx' // 数据库名称
 };
 
-module.exports = {
+export default {
   MYSQL_CONF,
 };
 ```
@@ -29,7 +29,7 @@ module.exports = {
 config.js：密钥信息
 
 ```
-module.exports = {
+export default {
   publicKey: xxx,
   CRYPTO_KEY: xxx,
   saltRounds: 10
